@@ -1,0 +1,47 @@
+services:
+  inference:
+    build:
+      context: .
+      dockerfile: Dockerfile.inference
+    container_name: customer-churn-inference
+    env_file:
+      - .env
+    ports:
+      - "${HOST_INFERENCE_PORT:-8002}:8000"
+    volumes:
+      - ./model_registry:/app/model_registry
+      - ./data:/app/data
+    restart: unless-stopped
+
+  demo:
+    build:
+      context: .
+      dockerfile: Dockerfile.demo
+    container_name: customer-churn-demo
+    environment:
+      API_URL: http://inference:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      inference:
+        condition: service_healthy
+    restart: unless-stopped
+
+  training:
+    profiles:
+      - training
+    build:
+      context: .
+      dockerfile: Dockerfile.training
+    container_name: customer-churn-training
+    env_file:
+      - .env
+    environment:
+      INFERENCE_URL: http://inference:8000
+    volumes:
+      - ./model_registry:/app/model_registry
+      - ./data:/app/data
+    depends_on:
+      inference:
+        condition: service_healthy
+    restart: "no"

@@ -1,0 +1,32 @@
+{
+  "algorithm": "LGBMClassifier",
+  "target_column": "y",
+  "feature_columns": [
+    "age",
+    "balance",
+    "day",
+    "duration",
+    "campaign",
+    "pdays",
+    "previous",
+    "job",
+    "marital",
+    "education",
+    "default",
+    "housing",
+    "loan",
+    "contact",
+    "month",
+    "poutcome",
+    "pdays_never"
+  ],
+  "source_data_path": "data\\raw\\data.csv",
+  "train_rows": 36168,
+  "validation_rows": 9043,
+  "evaluated_at": "2026-04-04T16:10:37.468029+00:00",
+  "previous_production_version": "churn_model_20260404_160458",
+  "promotion_reason": "Model passed validation and is eligible for promotion",
+  "model_name": "churn_model",
+  "version": "churn_model_20260404_161037",
+  "registered_at": "2026-04-04T16:10:37.468052+00:00"
+}
