@@ -17,6 +17,9 @@ RUN apt-get update \
 
 COPY --chown=app:app pyproject.toml uv.lock README.md ./
 COPY --chown=app:app src ./src
+# Render free instances use ephemeral storage. Bundle the committed production
+# registry so the inference service can load a model after each deployment.
+COPY --chown=app:app model_registry ./model_registry
 
 RUN uv sync --frozen --no-dev --no-editable \
     && mkdir -p /app/model_registry /app/data \
@@ -27,6 +30,6 @@ USER app
 EXPOSE 8000
 
 HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=5 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=4)"
+    CMD python -c "import os, urllib.request; urllib.request.urlopen('http://127.0.0.1:%s/health' % os.getenv('PORT', '8000'), timeout=4)"
 
-CMD ["python", "-m", "uvicorn", "src.inference.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "python -m uvicorn src.inference.app:app --host 0.0.0.0 --port \"${PORT:-8000}\""]

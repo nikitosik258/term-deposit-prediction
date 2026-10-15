@@ -1,0 +1,25 @@
+# Render Blueprint for the public demonstration environment.
+# Both services deploy only after the GitHub Actions CI checks for main pass.
+services:
+  - type: web
+    name: term-deposit-inference
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.inference
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: checksPass
+
+  - type: web
+    name: term-deposit-demo
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.demo
+    dockerContext: .
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: API_URL
+        fromService:
+          name: term-deposit-inference
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL

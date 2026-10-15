@@ -254,8 +254,19 @@ uv run pytest --cov --cov-report=term-missing
 
 Минимальный порог coverage — 75%.
 
-## CI/CD
+## CI и CD
 
 CI настроен через GitHub Actions: при `push` и `pull request` в `main` запускаются установка по `uv.lock`, Ruff, pytest с coverage и сборка Docker-образов inference, training и demo.
 
-CD пока не настроен: для автоматического развёртывания нужна отдельная цель, например сервер с Docker. Сборка образов в CI не является deployment.
+Для CD подготовлен Render Blueprint в `render.yaml`:
+
+- Render создаёт два Docker Web Service: `term-deposit-inference` и `term-deposit-demo`;
+- auto-deploy запускается только после успешных GitHub Actions checks для `main` (`checksPass`);
+- `/health` — healthcheck inference во время deployment;
+- Streamlit получает публичный URL inference через `RENDER_EXTERNAL_URL`;
+- на бесплатном тарифе текущий `model_registry` включён в inference-образ, потому что файловая система Render временная;
+- training остаётся локальной одноразовой задачей: новые версии модели не сохраняются на бесплатном Render между redeploy.
+
+После первого реального deployment в этот README нужно добавить публичные URL inference и Streamlit. До этого момента CD нельзя считать проверенным.
+
+Для rollback в Render Dashboard откройте сервис → **Deploys** → выберите один из двух последних успешных deploy → **Rollback**. На бесплатном тарифе доступны rollback только к двум предыдущим версиям.
