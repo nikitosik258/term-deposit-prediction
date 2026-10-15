@@ -267,6 +267,13 @@ CI настроен через GitHub Actions: при `push` и `pull request` �
 - на бесплатном тарифе текущий `model_registry` включён в inference-образ, потому что файловая система Render временная;
 - training остаётся локальной одноразовой задачей: новые версии модели не сохраняются на бесплатном Render между redeploy.
 
-После первого реального deployment в этот README нужно добавить публичные URL inference и Streamlit. До этого момента CD нельзя считать проверенным.
+Публичные сервисы Render (deployment проверен):
+
+- inference API: <https://term-deposit-inference.onrender.com>;
+- Streamlit-демонстратор: <https://term-deposit-demo.onrender.com>.
+
+Проверка состояния production-модели: <https://term-deposit-inference.onrender.com/health>.
+
+На бесплатном тарифе Render сервис может «засыпать» после простоя; первое обращение после этого иногда занимает около минуты.
 
 Для rollback в Render Dashboard откройте сервис → **Deploys** → выберите один из двух последних успешных deploy → **Rollback**. На бесплатном тарифе доступны rollback только к двум предыдущим версиям.
