@@ -274,6 +274,8 @@ CI настроен через GitHub Actions: при `push` и `pull request` �
 
 Проверка состояния production-модели: <https://term-deposit-inference.onrender.com/health>.
 
-На бесплатном тарифе Render сервис может «засыпать» после простоя; первое обращение после этого иногда занимает около минуты.
+## Демонстратор 
 
-Для rollback в Render Dashboard откройте сервис → **Deploys** → выберите один из двух последних успешных deploy → **Rollback**. На бесплатном тарифе доступны rollback только к двум предыдущим версиям.
+<img width="950" height="1245" alt="image" src="https://github.com/user-attachments/assets/55ddfbe6-07c6-4ea4-8321-375bb7b22bfb" />
+<img width="1063" height="395" alt="image" src="https://github.com/user-attachments/assets/efce40c2-8a44-4b30-8d16-3c68fbc9cabf" />
+
